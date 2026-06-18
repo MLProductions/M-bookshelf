@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sewage Society</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      background: #222;
+      padding: 10px;
+      z-index: 10;
+    }
+
+    button, a.button {
+      font-size: 17px;
+      margin: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 6px;
+      border: none;
+      text-decoration: none;
+      background: white;
+      color: #111;
+      display: inline-block;
+    }
+
+    #coverScreen {
+      padding: 30px;
+    }
+
+    #coverImage {
+      max-width: 420px;
+      width: 90%;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #000;
+    }
+
+    #readerScreen {
+      display: none;
+    }
+
+    #pageImage {
+      width: var(--page-width, 65%);
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+    }
+
+    .subtitle {
+      color: #ccc;
+      font-size: 20px;
+    }
+
+    @media (max-width: 700px) {
+      #pageImage {
+        width: var(--page-width, 95%);
+      }
+
+      button, a.button {
+        font-size: 15px;
+        padding: 7px 9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="coverScreen">
+    <h1>Sewage Society</h1>
+    <p class="subtitle">By Michael Levin</p>
+    <p>76 pages</p>
+
+    <img id="coverImage" src="books/sewage-society/pages/page-001.jpg" alt="Cover">
+
+    <br><br>
+
+    <button onclick="startReading()">Start Reading</button>
+    <button onclick="continueReading()">Continue</button>
+    <a class="button" href="index.html">Bookshelf</a>
+  </div>
+
+  <div id="readerScreen">
+    <div class="topbar">
+      <a class="button" href="index.html">Bookshelf</a>
+      <button onclick="goHome()">🏠 Cover</button>
+      <button onclick="prevPage()">← Previous</button>
+      <button onclick="zoomOut()">-</button>
+      <span id="pageInfo"></span>
+      <button onclick="zoomIn()">+</button>
+      <button onclick="nextPage()">Next →</button>
+    </div>
+
+    <img id="pageImage" src="" alt="Book page">
+  </div>
+
+  <script>
+    const pages = ["books/sewage-society/pages/page-001.jpg", "books/sewage-society/pages/page-002.jpg", "books/sewage-society/pages/page-003.jpg", "books/sewage-society/pages/page-004.jpg", "books/sewage-society/pages/page-005.jpg", "books/sewage-society/pages/page-006.jpg", "books/sewage-society/pages/page-007.jpg", "books/sewage-society/pages/page-008.jpg", "books/sewage-society/pages/page-009.jpg", "books/sewage-society/pages/page-010.jpg", "books/sewage-society/pages/page-011.jpg", "books/sewage-society/pages/page-012.jpg", "books/sewage-society/pages/page-013.jpg", "books/sewage-society/pages/page-014.jpg", "books/sewage-society/pages/page-015.jpg", "books/sewage-society/pages/page-016.jpg", "books/sewage-society/pages/page-017.jpg", "books/sewage-society/pages/page-018.jpg", "books/sewage-society/pages/page-019.jpg", "books/sewage-society/pages/page-020.jpg", "books/sewage-society/pages/page-021.jpg", "books/sewage-society/pages/page-022.jpg", "books/sewage-society/pages/page-023.jpg", "books/sewage-society/pages/page-024.jpg", "books/sewage-society/pages/page-025.jpg", "books/sewage-society/pages/page-026.jpg", "books/sewage-society/pages/page-027.jpg", "books/sewage-society/pages/page-028.jpg", "books/sewage-society/pages/page-029.jpg", "books/sewage-society/pages/page-030.jpg", "books/sewage-society/pages/page-031.jpg", "books/sewage-society/pages/page-032.jpg", "books/sewage-society/pages/page-033.jpg", "books/sewage-society/pages/page-034.jpg", "books/sewage-society/pages/page-035.jpg", "books/sewage-society/pages/page-036.jpg", "books/sewage-society/pages/page-037.jpg", "books/sewage-society/pages/page-038.jpg", "books/sewage-society/pages/page-039.jpg", "books/sewage-society/pages/page-040.jpg", "books/sewage-society/pages/page-041.jpg", "books/sewage-society/pages/page-042.jpg", "books/sewage-society/pages/page-043.jpg", "books/sewage-society/pages/page-044.jpg", "books/sewage-society/pages/page-045.jpg", "books/sewage-society/pages/page-046.jpg", "books/sewage-society/pages/page-047.jpg", "books/sewage-society/pages/page-048.jpg", "books/sewage-society/pages/page-049.jpg", "books/sewage-society/pages/page-050.jpg", "books/sewage-society/pages/page-051.jpg", "books/sewage-society/pages/page-052.jpg", "books/sewage-society/pages/page-053.jpg", "books/sewage-society/pages/page-054.jpg", "books/sewage-society/pages/page-055.jpg", "books/sewage-society/pages/page-056.jpg", "books/sewage-society/pages/page-057.jpg", "books/sewage-society/pages/page-058.jpg", "books/sewage-society/pages/page-059.jpg", "books/sewage-society/pages/page-060.jpg", "books/sewage-society/pages/page-061.jpg", "books/sewage-society/pages/page-062.jpg", "books/sewage-society/pages/page-063.jpg", "books/sewage-society/pages/page-064.jpg", "books/sewage-society/pages/page-065.jpg", "books/sewage-society/pages/page-066.jpg", "books/sewage-society/pages/page-067.jpg", "books/sewage-society/pages/page-068.jpg", "books/sewage-society/pages/page-069.jpg", "books/sewage-society/pages/page-070.jpg", "books/sewage-society/pages/page-071.jpg", "books/sewage-society/pages/page-072.jpg", "books/sewage-society/pages/page-073.jpg", "books/sewage-society/pages/page-074.jpg", "books/sewage-society/pages/page-075.jpg", "books/sewage-society/pages/page-076.jpg"];
+    const storagePrefix = "sewage-society-";
+
+    let currentPage = Number(localStorage.getItem(storagePrefix + "currentPage") || 0);
+    let zoom = Number(localStorage.getItem(storagePrefix + "bookZoom") || 65);
+
+    function saveState() {
+      localStorage.setItem(storagePrefix + "currentPage", currentPage);
+      localStorage.setItem(storagePrefix + "bookZoom", zoom);
+    }
+
+    function showCover() {
+      document.getElementById("coverScreen").style.display = "block";
+      document.getElementById("readerScreen").style.display = "none";
+    }
+
+    function showReader() {
+      document.getElementById("coverScreen").style.display = "none";
+      document.getElementById("readerScreen").style.display = "block";
+      showPage();
+    }
+
+    function startReading() {
+      currentPage = 0;
+      showReader();
+      window.scrollTo(0, 0);
+    }
+
+    function continueReading() {
+      currentPage = Number(localStorage.getItem(storagePrefix + "currentPage") || 0);
+      showReader();
+      window.scrollTo(0, 0);
+    }
+
+    function goHome() {
+      saveState();
+      showCover();
+      window.scrollTo(0, 0);
+    }
+
+    function showPage() {
+      if (currentPage < 0) currentPage = 0;
+      if (currentPage >= pages.length) currentPage = pages.length - 1;
+
+      document.getElementById("pageImage").src = pages[currentPage];
+
+      document.getElementById("pageInfo").innerText =
+        "Page " + (currentPage + 1) + " of " + pages.length;
+
+      document.documentElement.style.setProperty("--page-width", zoom + "%");
+
+      saveState();
+    }
+
+    function nextPage() {
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        showPage();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        showPage();
+        window.scrollTo(0, 0);
+      } else {
+        showCover();
+      }
+    }
+
+    function zoomIn() {
+      zoom = Math.min(zoom + 10, 150);
+      showPage();
+    }
+
+    function zoomOut() {
+      zoom = Math.max(zoom - 10, 30);
+      showPage();
+    }
+
+    document.addEventListener("keydown", function(e) {
+      if (document.getElementById("readerScreen").style.display === "block") {
+        if (e.key === "ArrowRight") nextPage();
+        if (e.key === "ArrowLeft") prevPage();
+        if (e.key === "+" || e.key === "=") zoomIn();
+        if (e.key === "-") zoomOut();
+        if (e.key === "Home") goHome();
+      }
+    });
+
+    showCover();
+  </script>
+
+</body>
+</html>

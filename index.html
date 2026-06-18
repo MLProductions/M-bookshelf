@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Michael's Bookshelf</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .subtitle {
+      color: #ccc;
+      font-size: 20px;
+    }
+
+    .bookshelf {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      max-width: 1100px;
+      margin: 40px auto;
+    }
+
+    .book-card {
+      background: #222;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 0 18px #000;
+    }
+
+    .book-card img {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .book-card a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .book-card:hover {
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Michael's Bookshelf</h1>
+  <p class="subtitle">Comics and animation books</p>
+
+  <div class="bookshelf">
+    
+      <div class="book-card">
+        <a href="sewage-society.html">
+          <img src="books/sewage-society/pages/page-001.jpg" alt="Sewage Society cover">
+          <h2>Sewage Society</h2>
+          <p>76 pages</p>
+        </a>
+      </div>
+
+  </div>
+</body>
+</html>
